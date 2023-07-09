@@ -1,0 +1,59 @@
+<p>Using filter functions!</p>
+
+<hr />
+Filtering using one property
+<!-- Filtering an array using -->
+<div class="separating-div">
+  <div class="item">
+    <!-- Using Directives in angular ngIf -->
+    <div>Displaying Availability</div>
+    <p *ngIf="searchName || availability">
+      The Availability of the name {{ searchName }} in the array is
+      {{ availability }}
+    </p>
+  </div>
+  <div class="item">
+    <input
+      type="text"
+      (keyup)="onTypeValue($event)"
+      placeholder="Enter the Name you want to check availability"
+    />
+    <button (click)="checkPropertyInArrays(exampleArray, 'name', searchName)">
+      Check Availability
+    </button>
+  </div>
+</div>
+
+<hr />
+<p>Checking If a username and password is available in a table</p>
+<div class="separating-div">
+  <div class="item">
+    <P>The value you are looking for is? {{availability2}}</P>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Value</th>
+          <th>Age</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of userData; let idx = index">
+          <td>{{ item.username }}</td>
+          <td>{{ item.password }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+    <div class="item">
+        <div>
+            <input type="text" (keyup)="onKeyUp($event, 0)"
+                placeholder="Enter the contentName"> <br>
+            <input type="text" (keyup)="onKeyUp($event, 1)"
+                placeholder="Enter the valueName"> <br>
+            <button (click)="checkAvailability()">Check In Table</button>
+        </div>
+    </div>
+</div>
+
+<!-- Checking an array of objects to see if there are values that match eg username and password -->
