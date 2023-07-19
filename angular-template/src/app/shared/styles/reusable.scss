@@ -1,0 +1,15 @@
+// This page is like our own bootstrap with our own reusable css
+.flex-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+.link {
+    color: blue;
+    cursor: pointer;
+}
