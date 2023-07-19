@@ -1,0 +1,10 @@
+/* You can add global styles to this file, and also import other style files */
+// This is the entry point of css in our file so we can import it here and it will be enforced globally
+* 
+{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+@import "./app/shared/styles/reusable.scss"

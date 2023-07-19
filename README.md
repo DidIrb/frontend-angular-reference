@@ -10,6 +10,7 @@ It covers the following topics,
 - Using Forms
 - Using Interfaces to enforce Types
 - Handling CRUD operations
+- Modules
 
 ## Template content
 
@@ -57,4 +58,4 @@ Clone this template branch from our repository
 
 Run the application and play around with the code
 
-<!-- If you wish to build it from scratch read the [process.md](./Process.md) file -->
+If you wish to build it from scratch read the [Procedure.md](./Procedure.md) file
