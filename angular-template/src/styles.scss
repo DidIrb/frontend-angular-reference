@@ -6,5 +6,11 @@
     margin: 0;
     box-sizing: border-box;
 }
+a {
+    text-decoration: none;
+}
 
-@import "./app/shared/styles/reusable.scss"
+@import "./app/shared/styles/reusable.scss";
+
+// making spinner available to whole application
+@import "./app/shared/styles/spinner.css"
