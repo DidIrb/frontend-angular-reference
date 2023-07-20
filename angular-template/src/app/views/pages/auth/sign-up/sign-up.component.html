@@ -1,1 +1,90 @@
-<p>sign-up works!</p>
+<!-- Angular reactive Form -->
+<form [formGroup]="Form" (ngSubmit)="onSubmit(Form)" class="form-wrapper">
+
+    <!-- Logo -->
+    <h4 class="flex-center head">CREATE ACCOUNT / SIGN UP</h4>
+    <hr>
+    <!-- FORM -->
+    <div class="Form">
+
+        <!-- MESSAGE -->
+        <div class="message">
+            <small class="error-text" *ngIf="response?.status == 400">{{response?.description}}!</small>
+            <small class="success-text" *ngIf="response?.status == 200">{{response?.message}}!</small> 
+        </div>
+
+        <!-- FIRST NAME -->
+        <div class="input-wrapper">
+            <input class="input" formControlName="first_name" required placeholder="Enter First Name" type="text">
+            <div class="error-text" *ngIf="Form.get('first_name')?.touched">
+                <span *ngIf="Form.get('first_name')?.errors" class="error-text">
+                    Please provide your First Name!!!
+                </span>
+            </div>
+        </div>
+
+        <!-- LAST NAME -->
+        <div class="input-wrapper">
+            <input class="input" formControlName="last_name" required placeholder="Enter Last Name" type="text">
+            <div class="error-text" *ngIf="Form.get('last_name')?.touched">
+                <span *ngIf="Form.get('last_name')?.errors" class="error-text">
+                    Please provide your Last Name!!!
+                </span>
+            </div>
+        </div>
+
+        <!-- USERNAME -->
+        <div class="input-wrapper">
+            <input class="input" formControlName="username" required placeholder="Enter Username" type="text">
+            <div class="error-text" *ngIf="Form.get('username')?.touched">
+                <span *ngIf="Form.get('username')?.errors" class="error-text">
+                    Please provide your username!!!
+                </span>
+            </div>
+        </div>
+
+        <!-- Email -->
+        <div class="input-wrapper">
+            <input class="input" formControlName="email" required placeholder="Enter Email" type="text">
+            <div class="error-text" *ngIf="Form.get('email')?.touched">
+                <span *ngIf="Form.get('email')?.errors" class="error-text">
+                    Please provide a valid email!!!
+                </span>
+            </div>
+        </div>
+
+        <!-- Password -->
+        <div class="input-wrapper">
+            <input class="input" formControlName="password" required placeholder="Enter password" type="text">
+            <div class="error-text" *ngIf="Form.get('password')?.touched">
+                <span *ngIf="Form.get('password')?.errors" class="error-text">
+                    Please provide your password!!!
+                </span>
+            </div>
+        </div>
+
+        <!-- Confirm Password -->
+        <div class="input-wrapper">
+            <input class="input"  formControlName="confirmPassword" required placeholder="Confirm  password" type="text">
+            <div class="error-text" *ngIf="Form.get('confirmPassword')?.touched">
+                <span *ngIf="Form.get('confirmPassword')?.errors" class="error-text">
+                    This field cannot be empty
+                </span>
+                <span  *ngIf="Form.errors?.['passwordMismatch']" class="error-text">
+                    Password don't match
+                </span>
+
+            </div>
+        </div>
+
+        <!-- Submit button -->
+        <button [disabled]="!Form.valid" class="submit-btn flex-center" type="submit">
+            <div *ngIf="isLoading" id="loading"></div> <!-- Spinner -->
+            <span *ngIf="!isLoading">Sign In </span>
+        </button>
+
+        <p class="more" routerLink="/sign-up">already have an account <span class="link ">sign in</span></p>
+        
+    </div>
+
+</form>

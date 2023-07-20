@@ -1,1 +1,43 @@
-<p>sign-in works!</p>
+<!-- Angular reactive Form -->
+<form [formGroup]="Form" (ngSubmit)="onSubmit(Form)" class="form-wrapper">
+
+    <!-- Logo -->
+    <h4  class="flex-center">SIGN IN</h4>
+
+    <!-- FORM -->
+    <div class="Form">    
+        <!-- MESSAGE -->
+        <div class="message">
+            <small class="error-text" *ngIf="errorMessage">{{errorMessage}}!</small>
+            <small class="success-text" *ngIf="successMessage">{{successMessage}}!</small>
+        </div>
+        <!-- Email -->
+        <div class="input-wrapper">
+            <input class="input" formControlName="email" required placeholder="Email" type="text">
+            <div class="error-text" *ngIf="Form.get('email')?.touched">
+                <span *ngIf="Form.get('email')?.errors" class="error-text">
+                    Please provide a valid email!!!
+                </span>
+            </div>
+        </div>
+
+        <!-- Password -->
+        <div class="input-wrapper">
+            <input class="input" formControlName="password" required placeholder="Provide password" type="text">
+            <div class="error-text"  *ngIf="Form.get('password')?.touched">
+                <span *ngIf="Form.get('password')?.errors" class="error-text">
+                    Please provide your password!!!
+                </span>
+            </div>
+        </div>
+
+        <!-- Submit button -->
+        <button [disabled]="!Form.valid" class="submit-btn flex-center" type="submit">
+            <div *ngIf="isLoading" id="loading"></div> <!-- Spinner -->
+            <span *ngIf="!isLoading">Sign In </span>
+        </button>
+
+        <p class="more" routerLink="/sign-up">Don't have an account <span class="link ">Sign Up</span></p>
+    </div>
+
+</form>

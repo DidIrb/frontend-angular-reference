@@ -96,8 +96,30 @@ In this example we have two layouts
 - admin layout
 - user layout
 
+Routing modules
+
+// Import the modules
+
+// Import components here
+
+    @NgModule({
+        imports: [
+        CommonModule,
+        RouterModule.forChild(AdminLayoutRoutes), // Add the routes
+        HttpClientModule,
+
+        ],
+        declarations: [
+            // add our components here
+        ]
+    })
+    
+    // Export the layout module
+    export class AdminLayoutModule {}
 ### Components
 In order to generate a component we use the command
 
     ng  generate component ComponentName
 
+
+### 

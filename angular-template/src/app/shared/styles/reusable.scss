@@ -13,3 +13,54 @@
     color: blue;
     cursor: pointer;
 }
+
+.submit-btn {
+    width: 100%;
+    padding: 8px;
+    border-radius: 5px;
+    background-color: rgb(47, 70, 176);
+    border: none;
+    cursor: pointer;
+    color: white;
+}
+
+// messages
+
+.error-text {
+    font-size: 14px;
+    color: red;
+}
+.success-text {
+    font-size: 14px;
+    color: green;
+}
+
+.input {
+    width: 100%;
+    padding: 7px;
+    border-radius: 5px;
+    border: 0.8px dashed black;
+    margin-bottom: 5px;
+    outline: none;
+}
+
+.input-wrapper {
+    width: 100%;
+    margin-bottom: 7px;
+}
+
+.form-wrapper {
+    width: 100%;
+    min-height: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.message {
+    margin-bottom: 13px;
+}
+
+.more {
+    margin-top: 7px;
+}
