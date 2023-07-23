@@ -58,4 +58,12 @@ Clone this template branch from our repository
 
 Run the application and play around with the code
 
+    cd angular-template
+
+    npm install
+
+    npm start
+
+
+
 If you wish to build it from scratch read the [Procedure.md](./Procedure.md) file

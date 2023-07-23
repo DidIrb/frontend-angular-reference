@@ -1,22 +1,29 @@
 import { Component } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { usersArray } from 'src/app/db/usersdb';
 import { Environment } from 'src/app/environments/env';
 import { response } from 'src/app/models/response';
 import { users } from 'src/app/models/users';
 import { LocalService } from 'src/app/services/local.service';
 
 @Component({
-  selector: 'app-sign-up',
-  templateUrl: './sign-up.component.html',
-  styleUrls: ['./sign-up.component.scss']
+  selector: 'app-users',
+  templateUrl: './users.component.html',
+  styleUrls: ['./users.component.scss']
 })
-export class SignUpComponent {
+export class UsersComponent {
+  usersList: users[] | undefined ;
+  
+  // Filter Methods
+
   Form!: FormGroup; // You have to add ! to prevent an error
   isLoading: boolean = false;
   userExists: boolean | undefined;
   errorMessage: string | undefined;
   successMessage: string | undefined;
   response: response | undefined;
+  view: string = "list";
+  idx: any;
 
   // securePasswordPatter: string = ; // use this for checking how secure the password is 
 
@@ -24,16 +31,30 @@ export class SignUpComponent {
 
   // Method to run on initialization of form!
   ngOnInit() {
+    // Protecting route
+    this.localService.checkStatus();
+    // Getting list of users
+    this.usersList = usersArray;
+    console.log(this.usersList);
+
+    // Building Forms
     this.Form = this.fb.group(
       {
         first_name: ['', [Validators.required]],
         last_name: ['', [Validators.required]],
         email: ['', [Validators.required, Validators.email]],
         username: ['', [Validators.required]],
-        password: ['', [Validators.required]], // , Validators.pattern(this.securePasswordPatter)] // how to check pattern
-        confirmPassword: ['', [Validators.required]],
-      },
-      { validators: this.passwordMatchValidator });
+        role: ['', [Validators.required]],
+      });
+  }
+
+  toggleView(data: string) {
+    this.view = data;
+  }
+  edit(data: any, idx: any) {
+    this.view = "edit";
+    this.Form.patchValue(data)
+    this.idx = idx;
   }
 
   // Constructing our form
@@ -46,7 +67,8 @@ export class SignUpComponent {
       last_name: Form.value.last_name,
       email: Form.value.email,
       username: Form.value.username,
-      password: Form.value.password,
+      // password: Form.value.password,
+      role: Form.value.role,
     };
 
     // If the base does not exist we are assuming you have no backend working
@@ -60,26 +82,26 @@ export class SignUpComponent {
   }
 
   localSUbmit(bodyData: users) {
-    this.response = this.localService.post(bodyData, "sign-up");
+    // Checking if it is create or update
+    if(this.view !== "create") {
+      this.response = this.localService.post(bodyData, this.idx);
+    } else {
+      this.response = this.localService.post(bodyData, "create");
+    }
     this.isLoading = false;
+
+    if(this.response?.status === 200) {
+      setTimeout(() => {  
+        this.view = "list";
+      }, 3000);
+    } else {
+      this.view = "create";
+    }
   }
 
   // Method to submit our data to our API
   apiCall() { }
 
-  // Checking if password matches
-  passwordMatchValidator(control: AbstractControl) {
-    // Get the password and confirm password fields
-    const password = control.get('password');
-    const confirmPassword = control.get('confirmPassword');
-    // If both fields are valid and have the same value, return null
-    if (password?.valid && confirmPassword?.valid && password.value === confirmPassword.value) {
-      return null;
-    }
-    // Otherwise, return an error object
-    return { passwordMismatch: true };
-  }
+
 
 }
-
-

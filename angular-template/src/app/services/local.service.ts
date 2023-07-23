@@ -13,29 +13,48 @@ export class LocalService {
   constructor(private router: Router) { }
 
   // Method to submit data to our local db
-  post(bodyData: users) {
+  post(bodyData: users, type: any) {
+
     // Table to check against
-    let userExists = this.check2PropertyInArray(usersArray, 'email', bodyData.email, 'username', bodyData.username);
-    console.log(userExists);
-
-    if (!userExists) {
-      // If user does not exist add the users details into the db
-      usersArray.push(bodyData);
-      
-      setTimeout(() => {
-        this.router.navigate(["/sign-in"]); // Navigate to the next page
-      }, 2000);
-      
-      // Return response
-      const response = { status: 200, message: "User created successfully", description: `${bodyData}` };
+    if (type !== "create" && type !== "sign-up") {
+      const idx = type
+      usersArray[idx] = {
+        first_name: bodyData.first_name,
+        username: bodyData.username,
+        last_name: bodyData.last_name,
+        email: bodyData.email,
+        role: bodyData.role,
+      }
+      const response = { status: 200, message: "User Updated successfully", description: `${usersArray}` };
       return response;
-
     } else {
-      // Return error message
-      const response = { status: 400, message: "User already exists", description: `${userExists}` };
-      return response;
+
+      let userExists = this.check2PropertyInArray(usersArray, 'email', bodyData.email, 'username', bodyData.username);
+      console.log(userExists);
+
+      if (!userExists) {
+        // If user does not exist add the users details into the db
+        if (type === "sign-up") {
+          usersArray.push(bodyData);
+          setTimeout(() => {
+            this.router.navigate(["/sign-in"]); // Navigate to the next page 
+          }, 2000);
+        } else {
+          usersArray.push(bodyData);
+        }
+
+        // Return response
+        const response = { status: 200, message: "User created successfully", description: `${bodyData}` };
+        return response;
+
+      } else {
+        // Return error message
+        const response = { status: 400, message: "User already exists", description: `${userExists}` };
+        return response;
+      }
     }
   }
+
 
 
 
@@ -50,4 +69,46 @@ export class LocalService {
     }
     return false;
   }
+
+  // Calling logout services
+  logout() {
+    localStorage.removeItem('Token');
+    localStorage.removeItem('UserInfo');
+    this.checkStatus();
+  }
+
+  checkStatus() {
+    // Getting the users information to determine if user is logged in and changing pat accordingly
+    const GetUserInfo: any = localStorage.getItem('UserInfo');
+    const userData = JSON.parse(GetUserInfo);
+
+    if (userData) {
+      console.log('Welcome start using you application', userData);
+      return userData;
+    } else {
+      console.log('Logging you out!!');
+      this.router.navigate(["/sign-in"]);
+    }
+
+  }
+
+  // GETTING USER DATA
+
+  getUsersReports() {
+
+    // Checking array for users with roles
+    let adminsArray = usersArray.filter(obj => obj.role === 'Admin');
+    let userArray = usersArray.filter(obj => obj.role === 'User');
+
+    const Reports = {
+      allUsers: usersArray.length,
+      Admins: adminsArray.length,
+      Users: userArray.length,
+    }
+
+    // Check if available in 
+    return Reports;
+
+  }
+
 }

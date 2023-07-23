@@ -122,4 +122,8 @@ In order to generate a component we use the command
     ng  generate component ComponentName
 
 
-### 
+### Topics to cover -
+
+Protecting routes
+Role based access control
+Redirecting

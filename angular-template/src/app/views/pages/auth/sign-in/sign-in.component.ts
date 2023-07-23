@@ -64,8 +64,10 @@ export class SignInComponent {
 
       // Navigate to the next page
       setTimeout(() => {
-          this.router.navigate(["/dashboard"]);
+          this.router.navigate(["admin/dashboard"]);
       }, 1000);
+
+      // Depending on the role we need to navigate a user to the right path
 
       localStorage.setItem('Token', response.token);
       localStorage.setItem('UserInfo', JSON.stringify(response.userData));
