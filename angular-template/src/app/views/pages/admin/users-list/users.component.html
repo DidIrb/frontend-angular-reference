@@ -29,7 +29,7 @@
                         <td>{{item?.email}}</td>
                         <td>
                             <button class="create-btn" (click)="edit(item, idx)">Edit</button>
-                            <button class="create-btn">Delete</button>
+                            <button class="create-btn" (click)="deleteUser(idx)">Delete</button>
                         </td>
 
                     </tr>
@@ -123,7 +123,8 @@
                 <!-- Submit button -->
                 <button [disabled]="!Form.valid" class="submit-btn flex-center" type="submit">
                     <div *ngIf="isLoading" id="loading"></div> <!-- Spinner -->
-                    <span *ngIf="!isLoading"> Create User </span>
+                    <span *ngIf="!isLoading && view === 'create'"> Create User </span>
+                    <span *ngIf="!isLoading && view !== 'create'"> Update User </span>
                 </button>
 
             </div>

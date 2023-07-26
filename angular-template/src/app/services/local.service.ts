@@ -17,7 +17,8 @@ export class LocalService {
 
     // Table to check against
     if (type !== "create" && type !== "sign-up") {
-      const idx = type
+      // Check if item exists in array and return it;
+      const idx = type;
       usersArray[idx] = {
         first_name: bodyData.first_name,
         username: bodyData.username,
@@ -56,6 +57,10 @@ export class LocalService {
   }
 
 
+  delete(idx: any) {
+    const x = usersArray.splice(idx, 1); 
+    return "Deleted User successfully";
+  }
 
 
   // Method to check if the data passed exists

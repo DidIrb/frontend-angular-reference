@@ -12,8 +12,8 @@ import { LocalService } from 'src/app/services/local.service';
   styleUrls: ['./users.component.scss']
 })
 export class UsersComponent {
-  usersList: users[] | undefined ;
-  
+  usersList: users[] | undefined;
+
   // Filter Methods
 
   Form!: FormGroup; // You have to add ! to prevent an error
@@ -81,17 +81,26 @@ export class UsersComponent {
     }
   }
 
+  // DELETE FROM ARRAY
+  deleteUser(index: any) {
+    // 
+    this.localService.delete(index);
+
+  }
+
+
   localSUbmit(bodyData: users) {
     // Checking if it is create or update
-    if(this.view !== "create") {
+    if (this.view !== "create") {
       this.response = this.localService.post(bodyData, this.idx);
     } else {
       this.response = this.localService.post(bodyData, "create");
     }
     this.isLoading = false;
 
-    if(this.response?.status === 200) {
-      setTimeout(() => {  
+    if (this.response?.status === 200) {
+      setTimeout(() => {
+        this.response = undefined;
         this.view = "list";
       }, 3000);
     } else {

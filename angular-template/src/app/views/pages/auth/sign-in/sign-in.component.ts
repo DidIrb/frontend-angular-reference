@@ -13,7 +13,7 @@ export class SignInComponent {
   Form!: FormGroup; // You have to add ! to prevent an error
   
   isLoading: boolean = false;
-  userExists: boolean | undefined;
+  userExists: any | undefined;
   errorMessage: string | undefined;
   successMessage: string | undefined;
 
@@ -46,6 +46,7 @@ export class SignInComponent {
     }
   }
 
+
   localSUbmit(bodyData: { email: string; password: string; }) {
 
     // Table to check against
@@ -64,7 +65,7 @@ export class SignInComponent {
 
       // Navigate to the next page
       setTimeout(() => {
-          this.router.navigate(["admin/dashboard"]);
+          this.router.navigate([ `${response.userData?.role.toLowerCase()}/dashboard`]);
       }, 1000);
 
       // Depending on the role we need to navigate a user to the right path
