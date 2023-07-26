@@ -2,10 +2,9 @@ import { RouterModule } from "@angular/router";
 import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
-import { AdminLayoutRoutes } from "../routes/admin-layout-routing.module";
-import { DashboardComponent } from "src/app/views/pages/admin/dashboard/dashboard.component";
-import { UsersComponent } from "src/app/views/pages/admin/users-list/users.component";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { DocumentsComponent } from "src/app/views/pages/users/documents/documents.component";
+import { UserLayoutRoutes } from "../routes/user-layout-routing.module";
 
 // Import the modules
 
@@ -14,18 +13,18 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 @NgModule({
     imports: [
       CommonModule,
-      RouterModule.forChild(AdminLayoutRoutes), // Add the routes
+      RouterModule.forChild(UserLayoutRoutes), // Add the routes
       HttpClientModule,
       FormsModule,
-      ReactiveFormsModule
+      ReactiveFormsModule,
+      
 
     ],
     declarations: [
         // add our components here
-        DashboardComponent,
-        UsersComponent
+        DocumentsComponent,
     ]
   })
   
   // Export the layout module
-  export class AdminLayoutModule {}
+  export class UserLayoutModule {}

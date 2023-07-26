@@ -1,0 +1,135 @@
+<!-- Showing users Data once logged in -->
+<div class="body">
+
+    <div class="wrappers">
+        <div class="col-10 shadow">
+            <div class="flex-between">
+                <h3>Users in system</h3>
+                <button class="create-btn shadow" (click)="toggleView('create')">Create User</button>
+            </div>
+            <hr>
+            <!-- Filter Methods -->
+            <table class="table">
+                <thead>
+                    <!-- Loop Through Array of columns -->
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Role </th>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Manage</th>
+                </thead>
+                <tbody>
+                    <!-- Display the content corresponding to column -->
+                    <tr *ngFor="let item of usersList; let idx = index">
+                        <td>{{item?.first_name}}</td>
+                        <td>{{item?.last_name}}</td>
+                        <td>{{item?.role}}</td>
+                        <td>{{item?.username}}</td>
+                        <td>{{item?.email}}</td>
+                        <td>
+                            <button class="create-btn" (click)="edit(item, idx)">Edit</button>
+                            <button class="create-btn" (click)="deleteUser(idx)">Delete</button>
+                        </td>
+
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Create a tables component that will be shared and show the data accordingly -->
+
+
+</div>
+
+<!-- Call modal when create btn is clicked -->
+<div *ngIf="view !== 'list'" class="overlay content">
+    <!-- Adding a form Here -->
+    <!-- Angular reactive Form -->
+    <div class="form-body shadow">
+
+        <form [formGroup]="Form" (ngSubmit)="onSubmit(Form)" class="form-wrapper">
+
+            <!-- Logo -->
+            <div class="flex-between">
+
+                <h4 class="head">CREATE/ADD USER</h4>
+                <div class="create-btn shadow" (click)="toggleView('list')">close</div>
+            </div>
+            <hr>
+            <!-- FORM -->
+            <div class="Form">
+
+                <!-- MESSAGE -->
+                <div class="message">
+                    <small class="error-text" *ngIf="response?.status == 400">{{response?.description}}!</small>
+                    <small class="success-text" *ngIf="response?.status == 200">{{response?.message}}!</small>
+                </div>
+
+                <!-- FIRST NAME -->
+                <div class="input-wrapper">
+                    <input class="input" formControlName="first_name" required placeholder="Enter First Name"
+                        type="text">
+                    <div class="error-text" *ngIf="Form.get('first_name')?.touched">
+                        <span *ngIf="Form.get('first_name')?.errors" class="error-text">
+                            Please provide your First Name!!!
+                        </span>
+                    </div>
+                </div>
+
+                <!-- LAST NAME -->
+                <div class="input-wrapper">
+                    <input class="input" formControlName="last_name" required placeholder="Enter Last Name" type="text">
+                    <div class="error-text" *ngIf="Form.get('last_name')?.touched">
+                        <span *ngIf="Form.get('last_name')?.errors" class="error-text">
+                            Please provide your Last Name!!!
+                        </span>
+                    </div>
+                </div>
+
+                <!-- USERNAME -->
+                <div class="input-wrapper">
+                    <input class="input" formControlName="username" required placeholder="Enter Username" type="text">
+                    <div class="error-text" *ngIf="Form.get('username')?.touched">
+                        <span *ngIf="Form.get('username')?.errors" class="error-text">
+                            Please provide your username!!!
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Email -->
+                <div class="input-wrapper">
+                    <input class="input" formControlName="email" required placeholder="Enter Email" type="text">
+                    <div class="error-text" *ngIf="Form.get('email')?.touched">
+                        <span *ngIf="Form.get('email')?.errors" class="error-text">
+                            Please provide a valid email!!!
+                        </span>
+                    </div>
+                </div>
+                <div class="input-wrapper">
+                    <select name="" id="" class="input" formControlName="role">
+                        <option value="" selected disabled>Choose User Role</option>
+                        <option value="Admin">Admin</option>
+                        <option value="User">User</option>
+                    </select>
+                    <div class="error-text"   *ngIf="Form.get('role')?.touched">
+                        <span *ngIf="Form.get('role')?.errors" class="error-text">
+                            Choose Users Role!!!
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Submit button -->
+                <button [disabled]="!Form.valid" class="submit-btn flex-center" type="submit">
+                    <div *ngIf="isLoading" id="loading"></div> <!-- Spinner -->
+                    <span *ngIf="!isLoading && view === 'create'"> Create User </span>
+                    <span *ngIf="!isLoading && view !== 'create'"> Update User </span>
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+</div>

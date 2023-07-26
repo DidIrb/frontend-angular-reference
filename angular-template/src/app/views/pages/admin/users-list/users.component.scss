@@ -1,0 +1,31 @@
+// You can import other css shared from other components
+@import "../dashboard/dashboard.component.scss";
+
+// CSS FOR TABLES COMPONENTS
+.create-btn {
+    padding: 7px;
+    outline: none;
+    border: none;
+    background-color: #fff;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 5px;
+}
+table {
+    min-width: 65%;
+}
+th {
+    padding-right: 10px;
+}
+.content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.form-body {
+    width: 400px;
+    background-color: #fff;
+    padding: 15px;
+    border-radius: 5px;
+}
