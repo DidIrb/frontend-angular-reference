@@ -1,0 +1,9 @@
+<!-- WE ARE NOT FOCUSING ON THE CSS THIS CAN COME LATER -->
+<a routerLink="/login">Have an account?</a>
+BACKEND ERRORS HERE
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <input type="text" formControlName="username" placeholder="Username" />
+  <input type="text" formControlName="email" placeholder="Email" />
+  <input type="password" formControlName="password" placeholder="Password" />
+  <button type="submit">Submit</button>
+</form>

@@ -62,3 +62,37 @@ In order for this to work we need to tell app.component.ts that it is a standalo
 
 We are going to use a public api in order to learn using NgRx
 
+#### Setting up routing
+
+create app.routes.ts in **src/app** add:
+
+    import { Route } from "@angular/router";
+
+    export const appRoute: Route[] = [
+        {
+            path: '',
+            loadChildren: () => import ('src/app/auth/auth.routes')
+            .then((m) => m.registerRoute)// LoadChildren enables lazy loading
+        }
+    ]
+
+create your paths that can be lazy loaded in the main routes file eg **auth.routes.ts** add:
+
+    // imports
+
+    export const registerRoute: Route[] = [
+        {
+            path: '',
+            component: Component
+        }
+    ]
+
+In order for the routes to work we need to update **main.ts** and provide routes to it
+
+    // imports
+
+    bootstrapApplication(AppComponent, {providers : [provideRouter(appRoute)]});
+
+
+Working on The project now lets get started [read more](./HowTo.md).
+
