@@ -190,3 +190,42 @@ using it in our component
         isSubmitting$ = this.store.select(selectIsSubmitting) //...
     }
 
+### Services to handle API calls
+
+create interface **src/app/auth/types/authResponse.interface.ts**  for response 
+    
+    export interface AuthResponseInterface {
+    user: CurrentUserInterface 
+    }
+
+create **src/app/auth/services/auth.service.ts** 
+
+    // imports
+    @Injectable({ providedIn: 'root' })
+    export class AuthService {
+        
+        constructor(private http: HttpClient) {}
+        register(data: RegisterRequestInterface): Observable<CurrentUserInterface> {
+            const url = environment.apiUrl + '/users'
+            return this.http.post<AuthResponseInterface>(url, data)
+            .pipe(map((response) => response.user));
+        }
+    }
+In order for this to work you need to update **main.ts**
+
+    import { provideHttpClient } from '@angular/common/http';
+
+    bootstrapApplication(AppComponent, {
+    providers: [ provideHttpClient()],
+    });
+## Setting up the environment variable in angular
+
+Generating Environment variables
+
+    npx -p @angular/cli@15 ng generate environments
+
+defining our environment variables
+
+    export const environment = {
+        apiUrl:  'https://api.realworld.io/api',
+    };
