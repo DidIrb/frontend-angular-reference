@@ -229,3 +229,82 @@ defining our environment variables
     export const environment = {
         apiUrl:  'https://api.realworld.io/api',
     };
+
+
+### EFFECTS
+
+Installing effects 
+
+    npm i @ngrx/effects
+
+update **./auth/store/actions.ts**
+
+    import { createActionGroup, emptyProps, props } from '@ngrx/store';
+
+    export const authActions = createActionGroup({
+        source: 'auth',
+        events: {
+            Register: props<{ request: RegisterRequestInterface }>(),
+            'Register success': props<{ currentUser: CurrentUserInterface }>(),
+            'Register Failure': emptyProps(),
+        },
+    });
+
+To reduce the amount of code written you can write an actionGroup instead, and define multiple actions.
+
+create **src/app/auth/store/effects.ts** 
+
+    // imports
+
+    export const registerEffect = createEffect(
+    (actions$ = inject(Actions), authService = inject(AuthService)) => {
+        return actions$.pipe(
+        ofType(authActions.register),
+        switchMap(({ request }) => {
+            return authService.register(request).pipe(
+            map((currentUser: CurrentUserInterface) => {
+                return authActions.registerSuccess({ currentUser });
+            }),
+            catchError(() => {
+                return of(authActions.registerFailure());
+            })
+            );
+        })
+        );
+    },  { functional: true }
+    );
+
+
+update **./auth/store/reducer.ts**
+
+    import { authActions } from './action';
+
+    const authFeature = createFeature({
+        name: 'auth',
+        reducer: createReducer(
+            initialState,
+            on(authActions.register, (state) => ({ ...state, isSubmitting: true }))
+        ),
+    });
+
+update component
+
+    import { authActions } from '../../store/action';
+
+    export class RegisterComponent { 
+        // ....
+        onSubmit() { // .... 
+            this.store.dispatch(authActions.register({ request }));
+        }
+    }
+
+
+You need to provide effects in **main.ts**
+
+    import { provideEffects } from '@ngrx/effects';
+    import * as authEffects from "./app/auth/store/effects";
+
+    bootstrapApplication(AppComponent, {
+    providers: [ provideEffects(authEffects)],
+    });
+

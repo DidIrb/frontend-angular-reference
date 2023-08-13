@@ -43,3 +43,22 @@ using it in our component
     export class RegisterComponent {
         isSubmitting$ = this.store.select(selectIsSubmitting) //...
     }
+
+
+Use create action group instead of createAction
+
+    // we need 3 effects typically
+    // export const register = createAction(
+    //   '[Auth] Register',
+    //   props<{ request: RegisterRequestInterface }>()
+    // );
+
+    // export const registerSuccess = createAction(
+    //   '[Auth] Register Success',
+    //   props<{ request: RegisterRequestInterface }>()
+    // );
+
+    // export const registerFailure = createAction(
+    //   '[Auth] Register Failure',
+    //   props<{ request: RegisterRequestInterface }>()
+    // );
