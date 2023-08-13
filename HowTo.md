@@ -8,14 +8,14 @@ Stand alone Components work differently let us see this in our **register** comp
 
 Create **auth/components/register/** :
 
-**register.component.ts file**
+**register.component.html file**
     
     <form [formGroup]="form" (ngSubmit)="onSubmit()">
         <input type="text" formControlName="username" placeholder="Username" />
         <button type="submit">Submit</button>
     </form>
 
-**register.component.html**
+**register.component.ts**
 
     // imports
 
@@ -307,4 +307,155 @@ You need to provide effects in **main.ts**
     bootstrapApplication(AppComponent, {
     providers: [ provideEffects(authEffects)],
     });
+
+### Handling errors, and displaying errors.
+
+create interface **src/app/shared/types/error.interface.ts**
+
+    export interface BackendErrorsInterface {
+        [key: string]: string[]
+    }
+
+Adding more values to our states
+
+update interface **src/app/auth/types/authState.interface.ts**
+
+    // imports
+    export interface AuthStateInterface {
+        isSubmitting: boolean
+        currentUser: CurrentUserInterface | null | undefined
+        isLoading: boolean
+        validationErrors: BackendErrorsInterface | null 
+    }
+
+updating states **src/app/auth/store/reducer.ts** 
+
+    const initialState: AuthStateInterface = {
+    isSubmitting: false,
+    isLoading: false,
+    currentUser: undefined,
+    validationErrors: null,
+    };
+
+    const authFeature = createFeature({
+    name: 'auth',
+    reducer: createReducer(
+        initialState,
+        on(authActions.register, (state) => ({
+        ...state,
+        isSubmitting: true,
+        validationErrors: null,
+        })),
+        on(authActions.registerSuccess, (state, action) => ({
+        ...state,
+        isSubmitting: false,
+        currentUser: action.currentUser,
+        })),
+        on(authActions.registerFailure, (state, action) => ({
+        ...state,
+        isSubmitting: false,
+        validationErrors: action.errors,
+        })),
+    ),
+    });
+
+    export const {
+    // ...
+    selectIsLoading,
+    selectCurrentUser,
+    selectValidationErrors
+    } = authFeature;
+
+
+Enable error message
+
+    export const authActions = createActionGroup({
+        source: 'auth',
+        events: {
+            // ...
+            'Register failure': props<{ errors: BackendErrorsInterface }>(),
+        },
+    });
+
+Update error message in the effect **src/app/auth/store/effects.ts** 
+
+    // imports 
+    export const registerEffect = createEffect(
+        // ...
+        catchError((errorResponse: HttpErrorResponse) => {
+            return of(authActions.registerFailure({
+                errors: errorResponse.error.errors,
+            }));
+        })
+    )
+
+
+
+### Displaying errors globally 
+
+Create a sharable backendError components
+
+**./sharable.component.ts file**
+    
+    // imports
+
+    @Component({
+        selector: 'mc-backend-error-messages',
+        // ...
+    })
+
+    export class BackendErrorMessages {
+        // Taking data from parent component
+        @Input() backendErrors: BackendErrorsInterface = {}
+        errorMessages: string[] = []
+
+        ngOnInit(): void {
+            this.errorMessages = Object.keys(this.backendErrors).map((name: string) => {
+                const messages = this.backendErrors[name].join(" ")
+                return `${name} ${messages}`
+            })
+        }
+    }
+
+**./sharable.component.html**
+
+    <li *ngFor="let errorMessage of errorMessages">
+        {{errorMessage}}
+    </li>
+
+### Using streams to reduce the number of directives written
+
+**register.html**
+
+    <ng-container *ngIf="data$ | async as data">
+        <a routerLink="/login">Have an account?</a><br>
+        // passing data into child component
+        <mc-backend-error-messages
+            *ngIf="data.backendErrors"
+            [backendErrors]="data.backendErrors" 
+        ></mc-backend-error-messages> 
+    </ng-container>
+
+**register.ts**
+
+    import { electIsSubmitting, selectValidationErrors,
+    } from '../../store/reducers';
+
+    import { combineLatest } from 'rxjs';
+    import { BackendErrorMessages } from '.../backendErrorMessages.component';
+
+    @Component({
+    /// ...
+    imports: [ //...
+        BackendErrorMessages,
+    ],
+    })
+    export class RegisterComponent {
+        // ...
+        data$ = combineLatest({
+            isSubmitting: this.store.select(selectIsSubmitting),
+            backendErrors: this.store.select(selectValidationErrors),
+        });
+        // ...
+    }
 
