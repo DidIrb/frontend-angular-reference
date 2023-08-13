@@ -459,3 +459,67 @@ Create a sharable backendError components
         // ...
     }
 
+
+
+
+## Persistence services
+
+create a persistence service **src/app/shared/services/persistance.service.ts** 
+
+    import { Injectable } from '@angular/core';
+
+    @Injectable({ providedIn: 'root' })
+    export class PersistanceService {
+        set(key: string, data: unknown): void {
+            try {
+                localStorage.setItem(key, JSON.stringify(data));
+            } catch (e) {
+                console.error('error saving to local storage', e);
+            }
+        }
+
+        get(key: string): unknown {
+            try {
+                const localStorageItem = localStorage.getItem(key);
+                return localStorageItem ? JSON.parse(localStorageItem) : null;
+            } catch (e) {
+                console.error('error getting from local storage', e);
+                return null;
+            }
+        }
+    }
+
+### using persistence service to make an action
+
+In **action.ts**
+
+
+    // imports
+
+    export const registerEffect = createEffect(
+    ( persistanceService = inject(PersistanceService) ) => {
+        return actions$.pipe(
+            ofType(authActions.register),
+            switchMap(({ request }) => {
+                return authService.register(request).pipe(
+                map((currentUser: CurrentUserInterface) => {
+                    persistanceService.set('accessToken', currentUser.token)
+                }),
+                catchError((errorResponse: HttpErrorResponse) => {
+                    return 
+                })
+                );
+            })
+        );
+    }, );
+
+    export const redirectAfterRegisterEffect = createEffect(
+        (actions$ = inject(Actions), router = inject(Router)) => {
+            return actions$.pipe(
+            ofType(authActions.registerSuccess),
+            tap(() => {
+                router.navigateByUrl('/')
+            })
+            )
+        }, { functional: true, dispatch: false }
+    )
