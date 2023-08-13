@@ -2,18 +2,24 @@ import { bootstrapApplication } from '@angular/platform-browser';
 import { AppComponent } from './app/app.component';
 import { provideRouter } from '@angular/router';
 import { appRoute } from './app/app.routes';
-import { provideStore } from '@ngrx/store';
+import { provideState, provideStore } from '@ngrx/store';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { isDevMode } from '@angular/core';
+import { authFeatureKey, authReducer } from './app/auth/store/reducers';
 
 bootstrapApplication(AppComponent, {
-  providers: [provideRouter(appRoute), provideStore(), provideStoreDevtools({
-    maxAge: 25, 
-    logOnly: !isDevMode(), 
-    autoPause: true, 
-    trace: false,
-    traceLimit: 75
-  })],
+  providers: [
+    provideRouter(appRoute),
+    provideStore(),
+    provideState(authFeatureKey, authReducer),
+    provideStoreDevtools({
+      maxAge: 25,
+      logOnly: !isDevMode(),
+      autoPause: true,
+      trace: false,
+      traceLimit: 75,
+    }),
+  ],
 });
 
 // This file needed to change because since we are using stand alone components instead

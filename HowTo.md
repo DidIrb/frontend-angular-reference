@@ -105,16 +105,42 @@ Update **main.ts** adding providers for our StoreDevTools
         })]
     });
 
+### Reducers
 
+This is just a function where we define how action are changing in our states.
 
-## Notes and Observations
+create interface **src/app/auth/types/authState.interface.ts**
 
-links do not work so in order to fix it you add 
+    export interface AuthStateInterface {
+        isSubmitting: boolean
+    }
 
-    import { RouterLink } from "@angular/router";
+create auth reducer **src/app/auth/store/reducers.ts**
     
-    @Component({
-        // ...
-        imports: [RouterLink]
+**NEEDS BETTER EXPLANATIONS**
+
+    // imports
+    
+    const initialState: AuthStateInterface = {
+        isSubmitting: false
+    }
+
+    const authFeature = createFeature({
+        name: 'auth',
+        reducer: createReducer(
+            initialState,
+            on(register, (state) => ({...state, isSubmitting: true}))
+        ),
     })
+
+    export const {name: authFeatureKey, reducer: authReducer} = authFeature
+
+Update **main.ts** in order to manage states better
+
+    import { provideState, provideStore } from '@ngrx/store';
+    import { authFeatureKey, authReducer } from './app/auth/store/reducers';
+
+    bootstrapApplication(AppComponent, {
+        providers: [ provideState(authFeatureKey, authReducer)],
+    });
 
