@@ -144,3 +144,49 @@ Update **main.ts** in order to manage states better
         providers: [ provideState(authFeatureKey, authReducer)],
     });
 
+### Selectors - 
+
+In order to pass the data into our component we use Selectors
+
+
+create **src/app/auth/store/selector.ts** 
+
+    import { createSelector } from "@ngrx/store";
+    import { AuthStateInterface } from "../types/authState.interface";
+
+    export const selectFeature = (state: {auth: AuthStateInterface}) => state.auth
+
+    export const selectIsSubmitting = createSelector(
+        selectFeature,
+        (state) => state.isSubmitting
+    )
+
+using it in our component
+
+    import { selectIsSubmitting } from "../../store/selectors";
+    import { AuthStateInterface } from "../../types/authState.interface";
+
+    export class RegisterComponent {
+        isSubmitting$ = this.store.select(selectIsSubmitting) // observable
+        constructor(private store: Store<{auth: AuthStateInterface}> ){}
+    }
+
+**you can use ngrx without it**
+
+Update the reducer instead in **src/app/auth/store/reducer.ts** 
+    
+    // ...
+
+    export const {
+        // ...
+        selectIsSubmitting,
+    } = authFeature;
+
+using it in our component
+
+    import { selectIsSubmitting } from "../../store/reducers";
+    // ...
+    export class RegisterComponent {
+        isSubmitting$ = this.store.select(selectIsSubmitting) //...
+    }
+

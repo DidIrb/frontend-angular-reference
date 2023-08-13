@@ -5,5 +5,5 @@ BACKEND ERRORS HERE
   <input type="text" formControlName="username" placeholder="Username" />
   <input type="text" formControlName="email" placeholder="Email" />
   <input type="password" formControlName="password" placeholder="Password" />
-  <button type="submit">Submit</button>
+  <button [disabled]="isSubmitting$ | async" type="submit">Submit</button>
 </form>
